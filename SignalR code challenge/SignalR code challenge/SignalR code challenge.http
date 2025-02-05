@@ -1,0 +1,6 @@
+@SignalR_code_challenge_HostAddress = http://localhost:5285
+
+GET {{SignalR_code_challenge_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
