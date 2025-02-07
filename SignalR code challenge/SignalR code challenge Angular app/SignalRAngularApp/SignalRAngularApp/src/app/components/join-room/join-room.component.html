@@ -1,0 +1,38 @@
+<div class="container">
+    <div class="row">
+        <section class="col-12 mt-5">
+            <h2 class="text-center text-dark">
+                Welcome to the SignalR Chat Application
+            </h2>
+            <p class="text-center mb-5 text-dark">Join one of the rooms to start a conversation</p>
+        </section>
+        <section class="card my-5">
+            <article class="card-body cardbody-color p-lg-5">
+                <form [formGroup]="profileForm">
+                    <p-inputgroup class="mb-3">
+                        <p-inputgroup-addon>
+                            <i class="pi pi-user"></i>
+                        </p-inputgroup-addon>
+                        <input pInputText formControlName="username" placeholder="Username" />
+                    </p-inputgroup>
+
+                    <p-inputgroup class="mb-3">
+                        <p-inputgroup-addon>
+                            <i class="pi pi-comments"></i>
+                        </p-inputgroup-addon>
+                        <p-select 
+                            formControlName="group" 
+                            [options]="rooms" 
+                            optionLabel="name" 
+                            placeholder="Group" 
+                        />
+                    </p-inputgroup>
+
+                    <p-button class="align-left" label="Join Room" [raised]="true" severity="success" (onClick)="onSubmit()"/>
+                </form>
+            </article>
+        </section>
+    </div>
+</div>
+
+<p-toast />
