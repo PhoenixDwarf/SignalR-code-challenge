@@ -15,8 +15,8 @@ export const routes: Routes = [
         loadComponent: () => import('./components/join-room/join-room.component').then(m => m.JoinRoomComponent)
     },
     {
-        path: 'chat',
-        loadComponent: () => import('./components/chat/chat.component').then(m => m.ChatComponent),
+        path: 'chat-room',
+        loadComponent: () => import('./components/chat-room/chat-room.component').then(m => m.ChatComponent),
     },
     {
         path: '**',

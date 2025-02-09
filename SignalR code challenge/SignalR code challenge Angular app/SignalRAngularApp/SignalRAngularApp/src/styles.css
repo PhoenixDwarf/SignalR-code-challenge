@@ -1,1 +1,46 @@
 /* You can add global styles to this file, and also import other style files */
+html, body {
+    height: 100%;
+}
+
+/*chat-room containers*/
+
+.chat-room .p-panel-content-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 92%;
+}
+
+.chat-room .p-panel-content-container, 
+.chat-room .p-panel-content {
+    flex-grow: 1;
+}
+
+.chat-room .p-panel-header {
+    height: 8%;
+}
+
+.p-panel-content {
+    height: 100%;
+}
+
+/*Scroll bar*/
+
+.overflow-auto::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.overflow-auto::-webkit-scrollbar-thumb {
+    background: #a3facd;
+    border-radius: 4px;
+}
+
+.overflow-auto::-webkit-scrollbar-thumb:hover {
+    background: #6ee7b7;
+}
+
+.overflow-auto::-webkit-scrollbar-thumb:active {
+    background-color: #34d399;
+}

@@ -34,11 +34,10 @@ export class JoinRoomComponent {
   private readonly router = inject(Router);
 
   public readonly rooms: Room[] = [
-    { name: 'New York', code: 'NY' },
-    { name: 'Rome', code: 'RM' },
-    { name: 'London', code: 'LDN' },
-    { name: 'Istanbul', code: 'IST' },
-    { name: 'Paris', code: 'PRS' },
+    { name: 'General', code: 'GEN' },
+    { name: 'Random', code: 'RAN' },
+    { name: 'BrainLMS', code: 'BRA' },
+    { name: 'Human Resources', code: 'HR' },
   ];
 
   public readonly profileForm = new FormGroup({
@@ -53,7 +52,7 @@ export class JoinRoomComponent {
     else if(!this.profileForm.controls.group.value) {
       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Group is required, please select one of the options.', life: 3000 });
     }
-    else this.router.navigate(['chat']);
+    else this.router.navigate(['chat-room']);
   }
 }
 
