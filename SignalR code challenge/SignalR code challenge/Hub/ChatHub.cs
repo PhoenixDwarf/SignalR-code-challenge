@@ -14,8 +14,8 @@ namespace SignalR_code_challenge.Hub
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName: userConnection.Room!);
             _connection[Context.ConnectionId] = userConnection;
-            await Clients.Group(userConnection.Room!).SendAsync("ReceiveMessage", "App", $"{userConnection.User} has joined the group");
-            await SendConnectedUser(userConnection.Room!);
+            await Clients.Group(userConnection.Room!).SendAsync("ReceiveMessage", "App", $"{userConnection.User} has joined the group", DateTime.Now);
+            await SendConnectedUsers(userConnection.Room!);
         }
 
         public async Task SendMessage(string message)
@@ -26,12 +26,12 @@ namespace SignalR_code_challenge.Hub
             }
         }
 
-        public Task SendConnectedUser(string room)
+        public Task SendConnectedUsers(string room)
         {
             var users = _connection.Values
                 .Where(x => x.Room == room)
                 .Select(x => x.User);
-            return Clients.Group(room).SendAsync("ConnedtedUser", users);
+            return Clients.Group(room).SendAsync("ConnedtedUsers", users);
         }
 
         public override Task OnDisconnectedAsync(Exception? exception)
@@ -41,8 +41,8 @@ namespace SignalR_code_challenge.Hub
                 return base.OnDisconnectedAsync(exception);
             }
             Clients.Group(roomConnection.Room!)
-                .SendAsync("ReceiveMessage", "App", $"{roomConnection.User} has left the group");
-            SendConnectedUser(roomConnection.Room!);
+                .SendAsync("ReceiveMessage", "App", $"{roomConnection.User} has left the group", DateTime.Now);
+            SendConnectedUsers(roomConnection.Room!);
             return base.OnDisconnectedAsync(exception);
         }
     }

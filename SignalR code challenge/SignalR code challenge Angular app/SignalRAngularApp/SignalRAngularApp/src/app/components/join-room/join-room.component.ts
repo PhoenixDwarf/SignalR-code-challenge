@@ -10,6 +10,7 @@ import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
+import { ChatService } from 'app/services/chat.service';
 
 @Component({
   selector: 'app-join-room',
@@ -32,6 +33,7 @@ export class JoinRoomComponent {
 
   private readonly messageService = inject(MessageService);
   private readonly router = inject(Router);
+  private readonly chatService: ChatService = inject(ChatService);
 
   public readonly rooms: Room[] = [
     { name: 'General', code: 'GEN' },
@@ -42,7 +44,7 @@ export class JoinRoomComponent {
 
   public readonly profileForm = new FormGroup({
     username: new FormControl('', [Validators.required]),
-    group: new FormControl('', [Validators.required]),
+    group: new FormControl<Room>({name: '', code: ''}, [Validators.required]),
   });
 
   onSubmit(): void {
@@ -52,7 +54,16 @@ export class JoinRoomComponent {
     else if(!this.profileForm.controls.group.value) {
       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Group is required, please select one of the options.', life: 3000 });
     }
-    else this.router.navigate(['chat-room']);
+    else {
+      const {username, group} = this.profileForm.value;
+      this.chatService.joinRoom(username!, group?.name!).subscribe({
+        next: () => {
+          console.log('Joined room successfully');
+          this.router.navigate(['chat-room']);
+        },
+        error: (error) => console.log('Error while joining room: ', error)
+      });
+    }
   }
 }
 

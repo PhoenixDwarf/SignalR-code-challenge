@@ -1,0 +1,74 @@
+:host {
+    --message-ft-bg: #daeadf;
+    --message-fm-bg: #34d399;
+    --message-box-shadow: #fff;
+}
+
+.chat-avatar {
+    min-width: 32px;
+}
+
+
+.from-them {
+    align-items: flex-start;
+    background-color: var(--message-ft-bg);
+    color: #000;
+}
+
+.from-me {
+    align-self: flex-end;
+    background-color: var(--message-fm-bg);
+    color: #fff; 
+}
+
+[class^="from-"] {
+    margin: 1rem 0;
+    width: fit-content;
+}
+
+.from-them:before {
+    border-bottom-right-radius: 0.8rem 0.7rem;
+    border-left: 1rem solid var(--message-ft-bg);
+    left: -0.35rem;
+    transform: translate(0, -0.1rem);
+}
+
+.from-me::before {
+    border-bottom-left-radius: 0.8rem 0.7rem;
+    border-right: 1rem solid var(--message-fm-bg);
+    right: -0.35rem;
+    transform: translate(0, -0.1rem);
+}
+
+.from-them::after {
+    background-color: var(--p-toast-success-background);
+    border-bottom-right-radius: 0.5rem;
+    left: 20px;
+    transform: translate(-30px, -2px);
+    width: 10px;
+}
+
+.from-me::after {
+    background-color: var(--p-toast-success-background);
+    border-bottom-left-radius: 0.5rem;
+    right: -40px;
+    transform:translate(-30px, -2px);
+    width: 10px;
+}
+
+.message .from-them::before, .message .from-them::after,
+.message .from-me::before, .message .from-me::after {
+    bottom: -0.1rem;
+    content: "";
+    height: 1rem;
+    position: absolute;
+}
+
+.message [class^="from-"] {
+    border-radius: 1.15rem;
+    line-height: 1.25;
+    max-width: 75%;
+    padding: 1rem 1.5rem;
+    position: relative;
+    word-wrap: break-word;
+}

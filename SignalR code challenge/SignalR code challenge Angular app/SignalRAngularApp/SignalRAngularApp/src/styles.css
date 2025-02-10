@@ -25,22 +25,51 @@ html, body {
     height: 100%;
 }
 
+.chat-room .p-panel {
+    background: var(--bs-gray-200);
+}
+
+.card.users-list, .messages-container {
+    border: 1px solid var(--p-form-field-border-color);
+}
+
 /*Scroll bar*/
 
-.overflow-auto::-webkit-scrollbar {
+.overflow-auto::-webkit-scrollbar,
+.p-datatable-table-container::-webkit-scrollbar {
     width: 8px;
     height: 8px;
 }
 
-.overflow-auto::-webkit-scrollbar-thumb {
+.overflow-auto::-webkit-scrollbar-thumb,
+.p-datatable-table-container::-webkit-scrollbar-thumb {
     background: #a3facd;
     border-radius: 4px;
 }
 
-.overflow-auto::-webkit-scrollbar-thumb:hover {
+.overflow-auto::-webkit-scrollbar-thumb:hover,
+.p-datatable-table-container::-webkit-scrollbar-thumb:hover {
     background: #6ee7b7;
 }
 
-.overflow-auto::-webkit-scrollbar-thumb:active {
+.overflow-auto::-webkit-scrollbar-thumb:active,
+.p-datatable-table-container::-webkit-scrollbar-thumb:active {
     background-color: #34d399;
+}
+
+/*Users List*/
+
+.users-list .p-datatable,
+.users-list .p-datatable-table-container {
+    height: 100%;
+}
+
+.p-datatable-table-container {
+    overflow: auto;
+}
+
+.users-list .p-datatable-table tr,
+.users-list .p-datatable-table tr > td,
+.users-list .p-datatable-table tr > th {
+    background: transparent;
 }
