@@ -15,8 +15,12 @@ export class ChatService {
   .configureLogging(signalR.LogLevel.Information)
   .build();
 
-  messages$ = new BehaviorSubject<string[]>([]);
+  messages$ = new BehaviorSubject<Messages[]>([]);
   connectedUsers$ = new BehaviorSubject<object[]>([]);
+  messages: Messages[] = [];
+  users: string[] = [];
+  loggedUser: string | undefined;
+  currentRoom: string | undefined;
 
   private readonly imageNames = [
     'amyelsner.png',
@@ -36,10 +40,13 @@ export class ChatService {
 
     this.connection.on('ReceiveMessage', (user: string, message: string, time: string) => {
       console.log(`${user}: ${message} at ${time}`);
+      this.messages = [...this.messages, { user, message, time }];
+      this.messages$.next(this.messages);
     });
 
     this.connection.on('ConnedtedUsers', (users: string[]) => {
       console.log(users);
+      //This simply adds an image to the user based on it's index so everyone will see the same image instead of a random one.
       const formatedUsers = users.map((user, index) => {
         return {
           name: user,
@@ -54,6 +61,7 @@ export class ChatService {
     from(this.connection.start()).subscribe({
       next: () => console.log('Connection started'),
       error: (error) => {
+        if(error?.message?.includes("not in the 'Disconnected' state.")) return;
         console.log('Error while starting connection: ', error);
         console.log('Trying to reconnect now');
         setTimeout(() => this.startConnection(), 5000);
@@ -62,6 +70,8 @@ export class ChatService {
   }
 
   joinRoom(user: string, room: string): Observable<void> {
+    this.loggedUser = user;
+    this.currentRoom = room;
     return from(this.connection.invoke('JoinRoom', { user, room }));
   } 
 
@@ -70,6 +80,14 @@ export class ChatService {
   }
 
   leaveChat(): Observable<void> {
+    this.loggedUser = undefined;
+    this.currentRoom = undefined;
     return from(this.connection.stop());
   }
+}
+
+export interface Messages {
+  user: string;
+  message: string;
+  time: string;
 }

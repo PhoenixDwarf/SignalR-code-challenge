@@ -1,26 +1,41 @@
 <div class="d-flex flex-column gap-4 h-100">
     <div #scrollWindow class="d-flex flex-column gap-2 h-100 overflow-auto">
-        @for (message of [1,2,3,4]; track message) {
-            <div class="d-flex gap-2 message align-items-end">
-                <p-avatar label="E" size="normal" shape="circle" class="chat-avatar me-2"></p-avatar>
-                 <div class="from-them">
-                    <span class="h6 d-block">Edwin:</span>
-                    <p class=" m-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        @for (message of messages; track message) {
+
+            @if(message.user !== chatService.loggedUser) {
+                <div class="d-flex gap-2 message align-items-end" [ngClass]="{'justify-content-center': message.user === 'App'}">
+                    @if(message.user !== 'App') {
+                        <p-avatar [label]="message.user[0] | uppercase" size="normal" shape="circle" class="chat-avatar me-2"/>
+                    }
+                     <div [ngClass]="{'from-them': message.user !== 'App'}">
+                        @if(message.user !== 'App') {
+                            <span class="h6 d-block">{{message.user}}</span>
+                        }
+                        <p class=" m-0">{{message.message}}</p>
+                        @if(message.user !== 'App') {
+                            <small class="float-end mt-2">{{message.time | date: 'medium'}}</small>
+                        }
+                    </div>
                 </div>
-            </div>
+            }
+
+            @else {
+                <div class="d-flex gap-2 message align-items-end flex-row-reverse">
+                    <p-avatar [label]="message.user[0] | uppercase" size="normal" shape="circle" class="chat-avatar me-2 ms-2"/>
+                     <div class="from-me">
+                        <span class="h6 d-block">{{message.user}}</span>
+                        <p class=" m-0">{{message.message}}</p>
+                        <small class="float-end mt-2">{{message.time | date: 'medium'}}</small>
+                    </div>
+                </div>
+            }
         }
-        <div class="d-flex gap-2 message align-items-end flex-row-reverse">
-            <p-avatar label="E" size="normal" shape="circle" class="chat-avatar me-2 ms-2"></p-avatar>
-             <div class="from-me">
-                <span class="h6 d-block">Edwin:</span>
-                <p class=" m-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-            </div>
-        </div>
     </div>
+
     <p-inputgroup>
-        <input pInputText placeholder="Enter a message" />
+        <input pInputText placeholder="Enter a message" [(ngModel)]="inputText" (keydown.enter)="sendMessage()"/>
         <p-inputgroup-addon>
-            <p-button icon="pi pi-send" severity="secondary" />
+            <p-button icon="pi pi-send" severity="secondary" (onClick)="sendMessage()"/>
         </p-inputgroup-addon>
     </p-inputgroup>
 </div>

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { InputGroupModule } from 'primeng/inputgroup';
@@ -25,11 +25,10 @@ import { ChatService } from 'app/services/chat.service';
     ButtonModule,
     ToastModule
   ],
-  providers: [MessageService],
   templateUrl: './join-room.component.html',
   styleUrl: './join-room.component.css'
 })
-export class JoinRoomComponent {
+export class JoinRoomComponent implements OnInit {
 
   private readonly messageService = inject(MessageService);
   private readonly router = inject(Router);
@@ -47,23 +46,34 @@ export class JoinRoomComponent {
     group: new FormControl<Room>({name: '', code: ''}, [Validators.required]),
   });
 
-  onSubmit(): void {
-    if(!this.profileForm.controls.username.value) {
+  ngOnInit(): void {
+    this.chatService.startConnection();
+  }
+
+  joinRoom(): void {
+    if(!this.profileForm.controls.username.value?.trim()) {
       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Username is required, please enter one.', life: 3000 });
+      return;
     }
-    else if(!this.profileForm.controls.group.value) {
+
+    if(this.profileForm.controls.username.value?.trim() == 'App') {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Invalid name, please try a different one', life: 3000 });
+      return;
+    }
+
+    if(!this.profileForm.controls.group.value?.name?.trim().length) {
       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Group is required, please select one of the options.', life: 3000 });
+      return;
     }
-    else {
-      const {username, group} = this.profileForm.value;
-      this.chatService.joinRoom(username!, group?.name!).subscribe({
+
+    const {username, group} = this.profileForm.value;
+      this.chatService.joinRoom(username?.trim()!, group?.name!).subscribe({
         next: () => {
           console.log('Joined room successfully');
           this.router.navigate(['chat-room']);
         },
         error: (error) => console.log('Error while joining room: ', error)
       });
-    }
   }
 }
 

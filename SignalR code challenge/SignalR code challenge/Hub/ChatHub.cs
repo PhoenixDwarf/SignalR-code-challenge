@@ -36,13 +36,19 @@ namespace SignalR_code_challenge.Hub
 
         public override Task OnDisconnectedAsync(Exception? exception)
         {
-            if (_connection.TryGetValue(Context.ConnectionId,out UserRoomConnection roomConnection))
+            if (!_connection.TryGetValue(Context.ConnectionId, out UserRoomConnection roomConnection))
             {
                 return base.OnDisconnectedAsync(exception);
             }
-            Clients.Group(roomConnection.Room!)
+
+            _connection.Remove(Context.ConnectionId);
+
+            if(roomConnection != null)
+            {
+                Clients.Group(roomConnection.Room!)
                 .SendAsync("ReceiveMessage", "App", $"{roomConnection.User} has left the group", DateTime.Now);
-            SendConnectedUsers(roomConnection.Room!);
+                SendConnectedUsers(roomConnection.Room!);
+            }
             return base.OnDisconnectedAsync(exception);
         }
     }

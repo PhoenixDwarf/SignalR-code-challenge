@@ -3,11 +3,11 @@
         <p-panel styleClass="h-100 d-flex flex-column justify-content-between">
             <ng-template #header styleClass="p-4">
                 <div class="d-flex align-items-center gap-2 ps-1">
-                    <h1 class="h2">{{chatName}} chat group</h1>
+                    <h1 class="h2">{{chatService.currentRoom}} chat group</h1>
                 </div>
             </ng-template>
             <ng-template #icons>
-                <p-button icon="pi pi-times" [rounded]="true" severity="danger" label="Leave" iconPos="right" (onClick)="goHome()" />
+                <p-button icon="pi pi-times" [rounded]="true" severity="danger" label="Leave" iconPos="right" (onClick)="leaveChat(true)" />
             </ng-template>
             <div class="row h-100 p-3 h-100">
                 <section class="col-md-4 h-100 p-0 pe-3">
