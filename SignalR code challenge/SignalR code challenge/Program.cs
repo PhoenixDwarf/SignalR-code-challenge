@@ -10,10 +10,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
+// Adds the dependency injection instance to be injected in the chatHub
 builder.Services.AddSingleton<IDictionary<string, UserRoomConnection>>(_ => new Dictionary<string, UserRoomConnection>());
 
-//CORS =]
-
+//Add CORS policy to allow local host 4200
 builder.Services.AddCors(options => {
     options.AddDefaultPolicy(builder =>
     {
@@ -33,11 +33,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+//Add routing
 app.UseRouting();
 
+//Add CORS
 app.UseCors();
 
-app.UseEndpoints(endpoint => endpoint.MapHub<ChatHub>(pattern: "/chat"));
+//Registers chat route
+app.MapHub<ChatHub>(pattern: "/chat");
 
 app.MapControllers();
 

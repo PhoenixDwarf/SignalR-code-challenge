@@ -73,3 +73,26 @@ html, body {
 .users-list .p-datatable-table tr > th {
     background: transparent;
 }
+
+/* Responsiveness */
+/* Following styles will make the app behave well in mobile devices*/
+
+
+@media screen and (max-width: 767px) {
+    .chat-room {
+        height: 100vh !important;
+    }
+    
+    .chat-room .chat-room-p-panel {
+        border-radius: 0;
+    }
+    
+    .sections-container > section:first-child {
+        max-height: 20% !important;
+        overflow: auto;
+    }
+
+    .sections-container > section:last-child {
+        height: 75% !important;
+    }
+}

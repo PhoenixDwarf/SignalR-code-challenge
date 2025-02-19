@@ -3,6 +3,7 @@ import { Component, inject } from '@angular/core';
 import { ChatService } from 'app/services/chat.service';
 
 import { TableModule } from 'primeng/table';
+import { tap } from 'rxjs';
 @Component({
   selector: 'app-users-list',
   templateUrl: './users-list.component.html',
@@ -14,5 +15,9 @@ import { TableModule } from 'primeng/table';
 })
 export class UsersListComponent {
   private readonly chatService: ChatService = inject(ChatService);
-  users$ = this.chatService.connectedUsers$;
+  users$ = this.chatService.connectedUsers$.pipe(
+    tap( users => {
+      console.table(users);
+    })
+  );
 }

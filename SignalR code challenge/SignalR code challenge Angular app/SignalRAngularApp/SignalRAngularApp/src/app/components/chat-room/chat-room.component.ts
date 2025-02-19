@@ -25,9 +25,11 @@ export class ChatComponent implements OnDestroy {
   router = inject(Router);
   chatService = inject(ChatService);
   primeMessageService = inject(MessageService);
+  leaveRoomSound = new Audio('../../../../assets/sounds/discord-leave.mp3');
 
   ngOnDestroy(): void {
-    console.log('chat leaved')
+    console.log('chat leaved');
+    this.leaveRoomSound.play();
     this.leaveChat();
   }
   
