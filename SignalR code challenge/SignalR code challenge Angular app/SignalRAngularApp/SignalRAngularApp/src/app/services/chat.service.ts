@@ -107,6 +107,7 @@ export class ChatService {
   // This also resets the on memory properties to hold the user and room name
 
   leaveChat(): Observable<void> {
+    this.messages = [];
     this.loggedUser = undefined;
     this.currentRoom = undefined;
     return from(this.connection.stop());
