@@ -13,11 +13,11 @@ builder.Services.AddSignalR();
 // Adds the dependency injection instance to be injected in the chatHub
 builder.Services.AddSingleton<IDictionary<string, UserRoomConnection>>(_ => new Dictionary<string, UserRoomConnection>());
 
-//Add CORS policy to allow local host 4200
+//Add CORS policy to allow all
 builder.Services.AddCors(options => {
-    options.AddDefaultPolicy(builder =>
+    options.AddDefaultPolicy(policy =>
     {
-        builder.WithOrigins("http://localhost:4200/")
+        policy.SetIsOriginAllowed(_ => true)
         .AllowAnyMethod()
         .AllowCredentials()
         .AllowAnyHeader();
