@@ -11,10 +11,7 @@ export class ChatService {
   // We add skipNegotiation to avoid CORS Policy errors with the backend server
 
   connection: signalR.HubConnection = new signalR.HubConnectionBuilder()
-  .withUrl('http://localhost:5000/chat', {
-    skipNegotiation: true,
-    transport: signalR.HttpTransportType.WebSockets
-  })
+  .withUrl('https://signalr-code-challenge.azurewebsites.net/chat')
   .configureLogging(signalR.LogLevel.Information)
   .build();
 
