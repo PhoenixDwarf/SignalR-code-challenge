@@ -1,6 +1,6 @@
 <div class="d-flex flex-column gap-4 h-100">
     <div #scrollWindow class="d-flex flex-column gap-2 h-100 overflow-auto">
-        @for (message of messages; track message) {
+        @for (message of messages$ | async; track message) {
 
             @if(message.user !== chatService.loggedUser) {
                 <div class="d-flex gap-2 message align-items-end" [ngClass]="{'justify-content-center': message.user === 'App'}">

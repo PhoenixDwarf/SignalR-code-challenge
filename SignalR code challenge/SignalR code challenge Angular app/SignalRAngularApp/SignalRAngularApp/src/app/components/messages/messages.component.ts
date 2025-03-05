@@ -1,7 +1,7 @@
-import { Component, ElementRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { ChatService, Messages } from 'app/services/chat.service';
 
 import { AvatarModule } from 'primeng/avatar';
@@ -25,10 +25,10 @@ import { MessageService } from 'primeng/api';
   templateUrl: './messages.component.html',
   styleUrl: './messages.component.css'
 })
-export class MessagesComponent implements OnInit, OnDestroy {
+export class MessagesComponent implements OnInit {
   chatService = inject(ChatService);
   primeMessageService = inject(MessageService);
-  messages$!: Subscription;
+  messages$!: Observable<Messages[]>;
   messages: Messages[] | null = [];
   inputText = '';
   joinRoomSound = new Audio('../../../../assets/sounds/discord-join.mp3');
@@ -44,33 +44,27 @@ export class MessagesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.messages$ = this.chatService.messages$.subscribe({
-      next: messgaes => {
-        console.log('MESAGGES', '\n', messgaes);
-        const lastMessage = messgaes.slice(-1)[0];
-        if(lastMessage.user === 'App') {
-          this.primeMessageService.add(
-            { 
-              severity: 'info', 
-              summary: lastMessage.message.includes('joined') ? 'User has joined the group': 'User has left the group', 
-              detail: lastMessage.message, 
-              life: 3000
-            }
-          );
-          lastMessage.message.includes('joined') ? this.joinRoomSound?.play() : this.leaveRoomSound?.play();
+    this.messages$ = this.chatService.messages$.pipe(tap(
+        messgaes => {
+          console.log('MESAGGES', '\n', messgaes);
+          const lastMessage = messgaes.slice(-1)[0];
+          if(lastMessage.user === 'App') {
+            this.primeMessageService.add(
+              { 
+                severity: 'info', 
+                summary: lastMessage.message.includes('joined') ? 'User has joined the group': 'User has left the group', 
+                detail: lastMessage.message, 
+                life: 3000
+              }
+            );
+            lastMessage.message.includes('joined') ? this.joinRoomSound?.play() : this.leaveRoomSound?.play();
+          }
+          else if(lastMessage. user !== this.chatService.loggedUser) {
+            this.messageSound.play();
+          }
+          this.scrollToBottom();
         }
-        else if(lastMessage. user !== this.chatService.loggedUser) {
-          this.messageSound.play();
-        }
-
-        this.messages = messgaes;
-        this.scrollToBottom();
-      }
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.messages$?.unsubscribe();
+    ));
   }
 
   scrollToBottom(): void {
